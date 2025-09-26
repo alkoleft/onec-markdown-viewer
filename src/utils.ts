@@ -34,7 +34,7 @@ export function readFileContent(file: File): Promise<string> {
  */
 export function createErrorHTML(message: string): string {
     return `
-        <div class="fade-in" style="color: #dc3545; text-align: center; padding: 40px;">
+        <div style="color: #dc3545; text-align: center; padding: 40px;">
             <h2>❌ Ошибка</h2>
             <p>${message}</p>
         </div>
@@ -42,12 +42,12 @@ export function createErrorHTML(message: string): string {
 }
 
 /**
- * Создает HTML для отображения контента с анимацией
+ * Создает HTML для отображения контента
  * @param content - HTML контент
- * @returns HTML код с анимацией
+ * @returns HTML код без анимации
  */
 export function createContentHTML(content: string): string {
-    return `<div class="fade-in">${content}</div>`;
+    return `<div>${content}</div>`;
 }
 
 /**

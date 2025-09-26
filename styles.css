@@ -20,43 +20,6 @@ body {
     flex-direction: column;
 }
 
-.toolbar {
-    background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
-    color: white;
-    padding: 10px 20px;
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-    box-shadow: 0 2px 4px rgba(0,0,0,0.1);
-    z-index: 1000;
-}
-
-.toolbar h1 {
-    font-size: 1.5em;
-    font-weight: 300;
-}
-
-.toolbar-controls {
-    display: flex;
-    gap: 10px;
-}
-
-.btn {
-    background: rgba(255,255,255,0.2);
-    color: white;
-    border: none;
-    padding: 8px 16px;
-    border-radius: 4px;
-    cursor: pointer;
-    font-size: 14px;
-    transition: all 0.3s ease;
-}
-
-.btn:hover {
-    background: rgba(255,255,255,0.3);
-    transform: translateY(-1px);
-}
-
 .content {
     flex: 1;
     overflow-y: auto;
@@ -267,38 +230,12 @@ body {
 
 /* Адаптивность */
 @media (max-width: 768px) {
-    .toolbar {
-        padding: 8px 15px;
-    }
-    
-    .toolbar h1 {
-        font-size: 1.2em;
-    }
-    
     .content {
         padding: 15px;
     }
-    
-    .toolbar-controls {
-        gap: 5px;
-    }
-    
-    .btn {
-        padding: 6px 12px;
-        font-size: 12px;
-    }
 }
 
-/* Анимации */
-.fade-in {
-    animation: fadeIn 0.5s ease-in;
-}
-
-@keyframes fadeIn {
-    from { opacity: 0; transform: translateY(20px); }
-    to { opacity: 1; transform: translateY(0); }
-}
-
+/* Стили для состояний */
 .loading {
     display: none;
     text-align: center;

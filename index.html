@@ -8,25 +8,15 @@
 </head>
 <body>
     <div class="viewer-container">
-        <div class="toolbar">
-            <h1>📝 Markdown Viewer</h1>
-            <div class="toolbar-controls">
-                <button class="btn" id="loadExampleBtn">📄 Пример</button>
-                <button class="btn" id="loadFileBtn">📁 Загрузить файл</button>
-            </div>
-        </div>
-        
         <div class="content">
             <div class="loading" id="loading">Обработка...</div>
             <div class="empty-state" id="emptyState">
-                <h2>Добро пожаловать в Markdown Viewer</h2>
-                <p>Загрузите markdown файл или нажмите "Пример" для просмотра демонстрационного контента</p>
+                <h2>Markdown Viewer готов к работе</h2>
+                <p>Используйте глобальную функцию renderMarkdown() для отображения markdown контента</p>
             </div>
             <div class="markdown-content" id="markdownContent"></div>
         </div>
     </div>
-
-    <input type="file" id="fileInput" accept=".md,.markdown,.txt" style="display: none;">
 
     <script type="module" src="/src/main.ts"></script>
 </body>
