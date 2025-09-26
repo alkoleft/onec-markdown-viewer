@@ -1,0 +1,21 @@
+{
+  "name": "markdown-viewer-app",
+  "version": "1.0.0",
+  "description": "Markdown viewer application for 1C integration",
+  "type": "module",
+  "scripts": {
+    "dev": "vite",
+    "build": "vite build",
+    "build:single": "vite build --mode single-file",
+    "preview": "vite preview",
+    "clean": "rm -rf dist"
+  },
+  "devDependencies": {
+    "vite": "^5.0.0",
+    "terser": "^5.0.0"
+  },
+  "dependencies": {
+    "marked": "^12.0.0",
+    "highlight.js": "11.11.1"
+  }
+}
