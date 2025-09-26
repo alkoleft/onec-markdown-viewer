@@ -18,9 +18,9 @@ export default defineConfig(({ mode }) => {
           manualChunks: undefined
         }
       },
-      target: 'es2015',
+      target: 'es2020',
       minify: 'terser',
-      sourcemap: false,
+      sourcemap: true,
       cssCodeSplit: false,
       assetsInlineLimit: isSingleFile ? 0 : 4096,
       outDir: 'dist'
@@ -38,6 +38,9 @@ export default defineConfig(({ mode }) => {
         singleFilePlugin(),
         standalonePlugin()
       ] : [])
-    ]
+    ],
+    esbuild: {
+      target: 'es2020'
+    }
   }
 })

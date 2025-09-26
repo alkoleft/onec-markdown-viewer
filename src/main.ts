@@ -10,11 +10,16 @@ import { registerLanguages, configureMarked } from './highlight-config.js';
 import { FileHandler, getExampleMarkdown } from './file-handler.js';
 import { createEventHandler } from './event-handler.js';
 import { createRenderer } from './renderer.js';
+import type { MarkdownViewerInterface, RendererInterface, FileHandlerInterface, EventHandlerInterface } from './types.js';
 
 /**
  * Главный класс приложения MarkdownViewer
  */
-class MarkdownViewer {
+class MarkdownViewer implements MarkdownViewerInterface {
+    private renderer!: RendererInterface;
+    private fileHandler!: FileHandlerInterface;
+    private eventHandler!: EventHandlerInterface;
+
     constructor() {
         // Инициализируем компоненты
         this.initComponents();
@@ -32,22 +37,28 @@ class MarkdownViewer {
     /**
      * Инициализирует компоненты приложения
      */
-    initComponents() {
+    initComponents(): void {
         // Создаем рендерер
         this.renderer = createRenderer();
         
+        // Получаем элемент input для файлов
+        const fileInput = document.getElementById('fileInput') as HTMLInputElement;
+        if (!fileInput) {
+            throw new Error('Не удалось найти элемент fileInput');
+        }
+        
         // Создаем обработчик файлов
         this.fileHandler = new FileHandler(
-            document.getElementById('fileInput'),
-            (content) => this.renderer.renderMarkdown(content),
-            (error) => this.renderer.showError(error)
+            fileInput,
+            (content: string) => this.renderer.renderMarkdown(content),
+            (error: Error) => this.renderer.showError(error.message)
         );
     }
 
     /**
      * Настраивает библиотеки
      */
-    setupLibraries() {
+    setupLibraries(): void {
         // Регистрируем языки для подсветки синтаксиса
         registerLanguages();
         
@@ -58,7 +69,7 @@ class MarkdownViewer {
     /**
      * Инициализирует обработчики событий
      */
-    initEventHandlers() {
+    initEventHandlers(): void {
         // Создаем обработчик событий
         this.eventHandler = createEventHandler(
             this.fileHandler,
@@ -72,7 +83,7 @@ class MarkdownViewer {
     /**
      * Загружает пример markdown контента
      */
-    async loadExample() {
+    async loadExample(): Promise<void> {
         const exampleMarkdown = getExampleMarkdown();
         this.renderer.renderMarkdown(exampleMarkdown);
     }

@@ -11,7 +11,7 @@ import 'highlight.js/styles/github.css';
 /**
  * Регистрирует языки для подсветки синтаксиса
  */
-export function registerLanguages() {
+export function registerLanguages(): void {
     // Регистрируем основные языки
     hljs.registerLanguage('json', json);
     hljs.registerLanguage('xml', xml);
@@ -19,7 +19,7 @@ export function registerLanguages() {
     hljs.registerLanguage('gherkin', gherkin);
 
     // Добавляем алиас bsl для языка 1C
-    hljs.registerLanguage('bsl', function(hljs) {
+    hljs.registerLanguage('bsl', function(hljs: any) {
         const definition = hljs.getLanguage('1c');
         return hljs.inherit(definition, { 
             aliases: ['bsl', '1c'] 
@@ -30,9 +30,9 @@ export function registerLanguages() {
 /**
  * Настраивает marked для работы с highlight.js
  */
-export function configureMarked(marked) {
+export function configureMarked(marked: any): void {
     marked.setOptions({
-        highlight: function(code, lang) {
+        highlight: function(code: string, lang: string): string {
             if (lang && hljs.getLanguage(lang)) {
                 try {
                     return hljs.highlight(code, { language: lang }).value;
@@ -54,11 +54,11 @@ export function configureMarked(marked) {
 
 /**
  * Применяет подсветку синтаксиса к блокам кода в HTML
- * @param {string} html - HTML строка с блоками кода
- * @returns {string} - HTML с примененной подсветкой синтаксиса
+ * @param html - HTML строка с блоками кода
+ * @returns HTML с примененной подсветкой синтаксиса
  */
-export function highlightCodeBlocks(html) {
-    return html.replace(/<pre><code class="language-([^"]*)">([\s\S]*?)<\/code><\/pre>/g, (match, lang, code) => {
+export function highlightCodeBlocks(html: string): string {
+    return html.replace(/<pre><code class="language-([^"]*)">([\s\S]*?)<\/code><\/pre>/g, (_match: string, lang: string, code: string) => {
         try {
             // Декодируем HTML entities
             const decodedCode = decodeHtmlEntities(code);
@@ -77,10 +77,10 @@ export function highlightCodeBlocks(html) {
 
 /**
  * Декодирует HTML entities в тексте
- * @param {string} text - Текст с HTML entities
- * @returns {string} - Декодированный текст
+ * @param text - Текст с HTML entities
+ * @returns Декодированный текст
  */
-function decodeHtmlEntities(text) {
+function decodeHtmlEntities(text: string): string {
     const textarea = document.createElement('textarea');
     textarea.innerHTML = text;
     return textarea.value;

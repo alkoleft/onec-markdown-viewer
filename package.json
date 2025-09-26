@@ -1,21 +1,25 @@
 {
-  "name": "markdown-viewer-app",
+  "name": "onec-markdown-viewer",
   "version": "1.0.0",
-  "description": "Markdown viewer application for 1C integration",
+  "description": "Markdown viewer application for 1C:Enterprise",
   "type": "module",
   "scripts": {
     "dev": "vite",
     "build": "vite build",
     "build:single": "vite build --mode single-file",
     "preview": "vite preview",
-    "clean": "rm -rf dist"
+    "clean": "rm -rf dist",
+    "type-check": "tsc --noEmit",
+    "lint": "tsc --noEmit"
   },
   "devDependencies": {
-    "vite": "^5.0.0",
-    "terser": "^5.0.0"
+    "@types/node": "^24.5.2",
+    "terser": "^5.0.0",
+    "typescript": "^5.9.2",
+    "vite": "^5.0.0"
   },
   "dependencies": {
-    "marked": "^12.0.0",
-    "highlight.js": "11.11.1"
+    "highlight.js": "11.11.1",
+    "marked": "^12.0.0"
   }
 }

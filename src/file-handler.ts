@@ -2,79 +2,92 @@
 // Этот модуль содержит функции для работы с файлами и их загрузкой
 
 import { isMarkdownFile, readFileContent, logError } from './utils.js';
+import type { FileHandlerInterface } from './types.js';
 
 /**
  * Класс для обработки файлов
  */
-export class FileHandler {
-    constructor(fileInput, onFileLoad, onError) {
+export class FileHandler implements FileHandlerInterface {
+    private fileInput: HTMLInputElement;
+    public onFileRead: (content: string) => void;
+    public onError: (error: Error) => void;
+
+    constructor(fileInput: HTMLInputElement, onFileLoad: (content: string) => void, onError: (error: Error) => void) {
         this.fileInput = fileInput;
-        this.onFileLoad = onFileLoad;
+        this.onFileRead = onFileLoad;
         this.onError = onError;
     }
 
     /**
      * Обрабатывает загрузку файла через input
-     * @param {Event} event - Событие изменения input
+     * @param event - Событие изменения input
      */
-    async handleFileLoad(event) {
-        const file = event.target.files[0];
+    async handleFileLoad(event: Event): Promise<void> {
+        const target = event.target as HTMLInputElement;
+        const file = target.files?.[0];
         if (!file) return;
 
         try {
             const content = await readFileContent(file);
-            this.onFileLoad(content);
+            this.onFileRead(content);
         } catch (error) {
-            logError('Ошибка загрузки файла', error);
-            this.onError('Ошибка загрузки файла: ' + error.message);
+            logError('Ошибка загрузки файла', error as Error);
+            this.onError(new Error('Ошибка загрузки файла: ' + (error as Error).message));
         }
     }
 
     /**
      * Обрабатывает перетаскивание файла
-     * @param {Event} event - Событие drop
+     * @param event - Событие drop
      */
-    async handleDrop(event) {
+    async handleDrop(event: DragEvent): Promise<void> {
         event.preventDefault();
-        const files = event.dataTransfer.files;
+        const files = event.dataTransfer?.files;
         
-        if (files.length > 0) {
+        if (files && files.length > 0) {
             const file = files[0];
             if (isMarkdownFile(file)) {
                 try {
                     const content = await readFileContent(file);
-                    this.onFileLoad(content);
+                    this.onFileRead(content);
                 } catch (error) {
-                    logError('Ошибка загрузки файла', error);
-                    this.onError('Ошибка загрузки файла: ' + error.message);
+                    logError('Ошибка загрузки файла', error as Error);
+                    this.onError(new Error('Ошибка загрузки файла: ' + (error as Error).message));
                 }
             } else {
-                this.onError('Пожалуйста, выберите markdown файл (.md, .markdown, .txt)');
+                this.onError(new Error('Пожалуйста, выберите markdown файл (.md, .markdown, .txt)'));
             }
         }
     }
 
     /**
      * Обрабатывает перетаскивание файла над областью
-     * @param {Event} event - Событие dragover
+     * @param event - Событие dragover
      */
-    handleDragOver(event) {
+    handleDragOver(event: DragEvent): void {
         event.preventDefault();
     }
 
     /**
      * Открывает диалог выбора файла
      */
-    openFileDialog() {
+    openFileDialog(): void {
         this.fileInput.click();
+    }
+
+    /**
+     * Инициализация обработчика
+     */
+    init(): void {
+        // Инициализация уже выполнена в конструкторе
     }
 }
 
 /**
  * Возвращает пример markdown контента
- * @returns {string} - Пример markdown контента
+ * @returns Пример markdown контента
  */
-export function getExampleMarkdown() {
+export function getExampleMarkdown(): string {
     return `# 🚀 Markdown Viewer для 1С
 
 ## ✨ Возможности приложения

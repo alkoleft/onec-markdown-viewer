@@ -4,12 +4,17 @@
 import { marked } from 'marked';
 import { highlightCodeBlocks } from './highlight-config.js';
 import { createErrorHTML, createContentHTML, logError } from './utils.js';
+import type { RendererInterface } from './types.js';
 
 /**
  * Класс для рендеринга markdown контента
  */
-export class Renderer {
-    constructor(markdownContent, loading, emptyState) {
+export class Renderer implements RendererInterface {
+    private markdownContent: HTMLElement;
+    private loading: HTMLElement;
+    private emptyState: HTMLElement;
+
+    constructor(markdownContent: HTMLElement, loading: HTMLElement, emptyState: HTMLElement) {
         this.markdownContent = markdownContent;
         this.loading = loading;
         this.emptyState = emptyState;
@@ -17,11 +22,11 @@ export class Renderer {
 
     /**
      * Рендерит markdown контент
-     * @param {string} content - Markdown контент
+     * @param content - Markdown контент
      */
-    renderMarkdown(content) {
+    renderMarkdown(content: string): void {
         try {
-            const html = marked.parse(content);
+            const html = marked.parse(content) as string;
             
             // Применяем подсветку синтаксиса к блокам кода
             const processedHtml = highlightCodeBlocks(html);
@@ -30,15 +35,15 @@ export class Renderer {
             this.hideLoading();
             this.hideEmptyState();
         } catch (error) {
-            logError('Ошибка парсинга markdown', error);
-            this.showError('Ошибка парсинга markdown: ' + error.message);
+            logError('Ошибка парсинга markdown', error as Error);
+            this.showError('Ошибка парсинга markdown: ' + (error as Error).message);
         }
     }
 
     /**
      * Показывает состояние загрузки
      */
-    showLoading() {
+    showLoading(): void {
         this.loading.classList.add('show');
         this.markdownContent.style.opacity = '0.5';
     }
@@ -46,7 +51,7 @@ export class Renderer {
     /**
      * Скрывает состояние загрузки
      */
-    hideLoading() {
+    hideLoading(): void {
         this.loading.classList.remove('show');
         this.markdownContent.style.opacity = '1';
     }
@@ -54,16 +59,16 @@ export class Renderer {
     /**
      * Скрывает пустое состояние
      */
-    hideEmptyState() {
+    hideEmptyState(): void {
         this.emptyState.style.display = 'none';
         this.markdownContent.style.display = 'block';
     }
 
     /**
      * Показывает ошибку
-     * @param {string} message - Сообщение об ошибке
+     * @param message - Сообщение об ошибке
      */
-    showError(message) {
+    showError(message: string): void {
         this.markdownContent.innerHTML = createErrorHTML(message);
         this.hideLoading();
         this.hideEmptyState();
@@ -72,7 +77,7 @@ export class Renderer {
     /**
      * Показывает пустое состояние
      */
-    showEmptyState() {
+    showEmptyState(): void {
         this.emptyState.style.display = 'block';
         this.markdownContent.style.display = 'none';
     }
@@ -80,7 +85,7 @@ export class Renderer {
     /**
      * Очищает контент
      */
-    clearContent() {
+    clearContent(): void {
         this.markdownContent.innerHTML = '';
         this.showEmptyState();
     }
@@ -88,12 +93,16 @@ export class Renderer {
 
 /**
  * Создает рендерер с привязкой к элементам DOM
- * @returns {Renderer} - Экземпляр рендерера
+ * @returns Экземпляр рендерера
  */
-export function createRenderer() {
+export function createRenderer(): RendererInterface {
     const markdownContent = document.getElementById('markdownContent');
     const loading = document.getElementById('loading');
     const emptyState = document.getElementById('emptyState');
+    
+    if (!markdownContent || !loading || !emptyState) {
+        throw new Error('Не удалось найти необходимые DOM элементы');
+    }
     
     return new Renderer(markdownContent, loading, emptyState);
 }
