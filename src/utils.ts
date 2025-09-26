@@ -26,62 +26,6 @@ export function readFileContent(file: File): Promise<string> {
     });
 }
 
-/**
- * Переключает полноэкранный режим
- */
-export function toggleFullscreen(): void {
-    if (!document.fullscreenElement) {
-        // Проверяем поддержку различных префиксов для совместимости
-        if (document.documentElement.requestFullscreen) {
-            document.documentElement.requestFullscreen().catch(err => {
-                console.warn('Не удалось войти в полноэкранный режим:', err);
-            });
-        } else if ((document.documentElement as any).webkitRequestFullscreen) {
-            (document.documentElement as any).webkitRequestFullscreen();
-        } else if ((document.documentElement as any).mozRequestFullScreen) {
-            (document.documentElement as any).mozRequestFullScreen();
-        } else if ((document.documentElement as any).msRequestFullscreen) {
-            (document.documentElement as any).msRequestFullscreen();
-        }
-    } else {
-        // Выходим из полноэкранного режима
-        if (document.exitFullscreen) {
-            document.exitFullscreen();
-        } else if ((document as any).webkitExitFullscreen) {
-            (document as any).webkitExitFullscreen();
-        } else if ((document as any).mozCancelFullScreen) {
-            (document as any).mozCancelFullScreen();
-        } else if ((document as any).msExitFullscreen) {
-            (document as any).msExitFullscreen();
-        }
-    }
-}
-
-/**
- * Проверяет, находится ли браузер в полноэкранном режиме
- * @returns true, если браузер в полноэкранном режиме
- */
-export function isFullscreen(): boolean {
-    return !!(document.fullscreenElement || 
-              (document as any).webkitFullscreenElement || 
-              (document as any).mozFullScreenElement || 
-              (document as any).msFullscreenElement);
-}
-
-/**
- * Выходит из полноэкранного режима
- */
-export function exitFullscreen(): void {
-    if (document.exitFullscreen) {
-        document.exitFullscreen();
-    } else if ((document as any).webkitExitFullscreen) {
-        (document as any).webkitExitFullscreen();
-    } else if ((document as any).mozCancelFullScreen) {
-        (document as any).mozCancelFullScreen();
-    } else if ((document as any).msExitFullscreen) {
-        (document as any).msExitFullscreen();
-    }
-}
 
 /**
  * Создает HTML для отображения ошибки

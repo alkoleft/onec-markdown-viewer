@@ -25,16 +25,6 @@ export interface FileHandlerInterface {
   handleFileLoad(event: Event): Promise<void>;
   
   /**
-   * Обрабатывает перетаскивание файла
-   */
-  handleDrop(event: DragEvent): Promise<void>;
-  
-  /**
-   * Обрабатывает перетаскивание файла над областью
-   */
-  handleDragOver(event: DragEvent): void;
-  
-  /**
    * Открывает диалог выбора файла
    */
   openFileDialog(): void;

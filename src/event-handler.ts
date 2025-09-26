@@ -1,7 +1,6 @@
-// Обработка событий и горячих клавиш
+// Обработка событий
 // Этот модуль содержит функции для обработки пользовательских событий
 
-import { toggleFullscreen, exitFullscreen, isFullscreen } from './utils.js';
 import type { FileHandlerInterface, EventHandlerInterface } from './types.js';
 
 /**
@@ -21,7 +20,6 @@ export class EventHandler implements EventHandlerInterface {
         // Кнопки управления
         const loadExampleBtn = document.getElementById('loadExampleBtn');
         const loadFileBtn = document.getElementById('loadFileBtn');
-        const fullscreenBtn = document.getElementById('fullscreenBtn');
         
         if (loadExampleBtn) {
             loadExampleBtn.addEventListener('click', () => this.onLoadExample());
@@ -31,51 +29,13 @@ export class EventHandler implements EventHandlerInterface {
             loadFileBtn.addEventListener('click', () => this.fileHandler.openFileDialog());
         }
         
-        if (fullscreenBtn) {
-            fullscreenBtn.addEventListener('click', () => toggleFullscreen());
-        }
-        
         // Загрузка файла
         const fileInput = document.getElementById('fileInput') as HTMLInputElement;
         if (fileInput) {
             fileInput.addEventListener('change', (e) => this.fileHandler.handleFileLoad(e));
         }
-        
-        // Горячие клавиши
-        document.addEventListener('keydown', (e) => this.handleKeydown(e));
-        
-        // Drag & Drop
-        document.addEventListener('dragover', (e) => this.fileHandler.handleDragOver(e as DragEvent));
-        document.addEventListener('drop', (e) => this.fileHandler.handleDrop(e as DragEvent));
     }
 
-    /**
-     * Обрабатывает нажатия клавиш
-     * @param event - Событие нажатия клавиши
-     */
-    private handleKeydown(event: KeyboardEvent): void {
-        // Обработка Ctrl+O для открытия файла
-        if (event.ctrlKey || event.metaKey) {
-            switch(event.key) {
-                case 'o':
-                case 'O':
-                    event.preventDefault();
-                    this.fileHandler.openFileDialog();
-                    break;
-            }
-        }
-        
-        // Обработка F11 для полноэкранного режима
-        if (event.key === 'F11') {
-            event.preventDefault();
-            toggleFullscreen();
-        }
-        
-        // Обработка Escape для выхода из полноэкранного режима
-        if (event.key === 'Escape' && isFullscreen()) {
-            exitFullscreen();
-        }
-    }
 }
 
 /**
