@@ -4,9 +4,9 @@
 import hljs from 'highlight.js/lib/core';
 import json from 'highlight.js/lib/languages/json';
 import xml from 'highlight.js/lib/languages/xml';
-import onec from 'highlight.js/lib/languages/1c';
-import gherkin from 'highlight.js/lib/languages/gherkin';
-import 'highlight.js/styles/github.css';
+import 'highlight.js/styles/vs.css';
+import bsl from './bsl';
+import gherkin from './gherkin';
 
 /**
  * Регистрирует языки для подсветки синтаксиса
@@ -15,16 +15,9 @@ export function registerLanguages(): void {
     // Регистрируем основные языки
     hljs.registerLanguage('json', json);
     hljs.registerLanguage('xml', xml);
-    hljs.registerLanguage('1c', onec);
+    hljs.registerLanguage('bsl', bsl);
     hljs.registerLanguage('gherkin', gherkin);
-
-    // Добавляем алиас bsl для языка 1C
-    hljs.registerLanguage('bsl', function(hljs: any) {
-        const definition = hljs.getLanguage('1c');
-        return hljs.inherit(definition, { 
-            aliases: ['bsl', '1c'] 
-        });
-    });
+    hljs.registerLanguage('turbo-gherkin', gherkin);
 }
 
 /**
@@ -32,7 +25,7 @@ export function registerLanguages(): void {
  */
 export function configureMarked(marked: any): void {
     marked.setOptions({
-        highlight: function(code: string, lang: string): string {
+        highlight: function (code: string, lang: string): string {
             if (lang && hljs.getLanguage(lang)) {
                 try {
                     return hljs.highlight(code, { language: lang }).value;
@@ -62,10 +55,10 @@ export function highlightCodeBlocks(html: string): string {
         try {
             // Декодируем HTML entities
             const decodedCode = decodeHtmlEntities(code);
-            
+
             // Применяем подсветку синтаксиса
             const highlighted = hljs.highlight(decodedCode, { language: lang || 'plaintext' }).value;
-            
+
             return `<pre><code class="language-${lang} hljs">${highlighted}</code></pre>`;
         } catch (error) {
             console.warn('Ошибка подсветки синтаксиса для языка:', lang, error);

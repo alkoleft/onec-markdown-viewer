@@ -1,6 +1,6 @@
 import { defineConfig } from 'vite'
 import { resolve } from 'path'
-import { singleFilePlugin, standalonePlugin } from './vite-plugin-single-file.js'
+import { singleFilePlugin } from './vite-plugin-single-file.js'
 
 export default defineConfig(({ mode }) => {
   const isSingleFile = mode === 'single-file'
@@ -9,7 +9,8 @@ export default defineConfig(({ mode }) => {
     build: {
       rollupOptions: {
         input: {
-          main: resolve(__dirname, 'index.html')
+          main: resolve(__dirname, 'index.html'),
+          demo: resolve(__dirname, 'demo.html')
         },
         output: {
           entryFileNames: isSingleFile ? 'assets/[name].js' : 'assets/[name]-[hash].js',
@@ -18,7 +19,7 @@ export default defineConfig(({ mode }) => {
           manualChunks: undefined
         }
       },
-      target: 'es2020',
+      target: 'es2018',
       minify: 'terser',
       sourcemap: true,
       cssCodeSplit: false,
@@ -35,12 +36,11 @@ export default defineConfig(({ mode }) => {
     plugins: [
       // Плагин для создания единого HTML файла
       ...(isSingleFile ? [
-        singleFilePlugin(),
-        standalonePlugin()
+        singleFilePlugin()
       ] : [])
     ],
     esbuild: {
-      target: 'es2020'
+      target: 'es2018'
     }
   }
 })

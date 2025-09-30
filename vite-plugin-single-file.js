@@ -96,17 +96,3 @@ function replaceTextAtPosition(originalString, startIndex, endIndex, replacement
   // Concatenate the parts with the replacement text in between
   return before + replacementText + after;
 }
-
-/**
- * Плагин для создания standalone HTML файла
- * Создает полностью автономный HTML файл без внешних зависимостей
- */
-export function standalonePlugin() {
-  return {
-    name: 'standalone-build',
-    closeBundle() {
-      // Этот функционал уже включен в singleFilePlugin
-      console.log('Standalone плагин выполнен')
-    }
-  }
-}
