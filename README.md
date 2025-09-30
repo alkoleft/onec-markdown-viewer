@@ -135,7 +135,7 @@ if (isMarkdownSupported()) {
 ```json
 {
     "name": "markdown-viewer",
-    "version": "1.0.0",
+    "version": "1.1.0",
     "dependencies": {
         "marked": "^12.0.0"
     }

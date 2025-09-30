@@ -1,6 +1,6 @@
 {
   "name": "onec-markdown-viewer",
-  "version": "1.0.0",
+  "version": "1.1.0",
   "description": "Markdown viewer application for 1C:Enterprise",
   "type": "module",
   "scripts": {
