@@ -1,7 +1,15 @@
-* {
-    margin: 0;
-    padding: 0;
-    box-sizing: border-box;
+:root {
+    --code-bg: #f6f8fa;
+    --code-color: #24292e;
+    --code-border: #d0d7de;
+}
+
+@media (prefers-color-scheme: dark) {
+    :root {
+        --code-bg: #f6f8fa;
+        --code-color: #24292e;
+        --code-border: #d0d7de;
+    }
 }
 
 body {
@@ -12,6 +20,7 @@ body {
     background-color: #f8f9fa;
     height: 100vh;
     overflow: hidden;
+    margin: 0;
 }
 
 .viewer-container {
@@ -90,23 +99,22 @@ body {
 }
 
 .markdown-content code {
-    background: #f8f9fa;
-    padding: 2px 6px;
+    background: var(--code-bg);
+    padding: 1px 3px;
     border-radius: 3px;
-    font-family: 'Monaco', 'Menlo', 'Ubuntu Mono', monospace;
+    font-family: 'Consolas', 'Monaco', 'Menlo', 'Ubuntu Mono', monospace;
     font-size: 0.9em;
-    color: #e74c3c;
+    color: var(--code-color);
 }
 
 .markdown-content pre {
     background: #f6f8fa;
     color: #24292e;
-    padding: 12px;
+    padding: 8px;
     border-radius: 5px;
     overflow-x: auto;
-    margin: 20px 0;
+    margin: 10px 0;
     position: relative;
-    border: 1px solid #e1e4e8;
 }
 
 .markdown-content pre code {
@@ -160,72 +168,6 @@ body {
     height: 2px;
     background: linear-gradient(to right, transparent, #bdc3c7, transparent);
     margin: 30px 0;
-}
-
-/* Специальные стили для языков программирования - светлая тема */
-.language-bsl {
-    background: #f6f8fa !important;
-}
-
-.language-gherkin {
-    background: #f6f8fa !important;
-}
-
-.language-json {
-    background: #f6f8fa !important;
-}
-
-/* Улучшенные стили для подсветки кода - светлая тема */
-.markdown-content pre code.hljs {
-    background: #f6f8fa !important;
-    color: #24292e !important;
-    padding: 0 !important;
-    border-radius: 5px !important;
-    overflow-x: auto !important;
-    font-size: 14px !important;
-    line-height: 1.5 !important;
-}
-
-.markdown-content pre code.hljs .hljs-keyword {
-    color: #d73a49 !important;
-    font-weight: bold !important;
-}
-
-.markdown-content pre code.hljs .hljs-string {
-    color: #032f62 !important;
-}
-
-.markdown-content pre code.hljs .hljs-comment {
-    color: #6a737d !important;
-    font-style: italic !important;
-}
-
-.markdown-content pre code.hljs .hljs-number {
-    color: #005cc5 !important;
-}
-
-.markdown-content pre code.hljs .hljs-function .hljs-title {
-    color: #6f42c1 !important;
-}
-
-.markdown-content pre code.hljs .hljs-built_in {
-    color: #e36209 !important;
-}
-
-.markdown-content pre code.hljs .hljs-type {
-    color: #005cc5 !important;
-}
-
-.markdown-content pre code.hljs .hljs-literal {
-    color: #e36209 !important;
-}
-
-.markdown-content pre code.hljs .hljs-attr {
-    color: #005cc5 !important;
-}
-
-.markdown-content pre code.hljs .hljs-punctuation {
-    color: #6a737d !important;
 }
 
 /* Адаптивность */

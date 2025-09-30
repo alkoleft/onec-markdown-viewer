@@ -4,21 +4,72 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Markdown Viewer - Demo</title>
-    <link rel="stylesheet" href="styles.css">
     <style>
+        body {
+            margin: 0;
+            padding: 0;
+            height: 100vh;
+            overflow: hidden;
+        }
+        
         .demo-container {
-            max-width: 1200px;
+            max-width: 1400px;
             margin: 0 auto;
             padding: 20px;
+            height: 100vh;
+            display: flex;
+            flex-direction: column;
+            box-sizing: border-box;
+        }
+        
+        .demo-layout {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 20px;
+            align-items: stretch;
+            flex: 1;
+            min-height: 0;
+        }
+        
+        @media (max-width: 768px) {
+            body {
+                overflow: auto;
+            }
+            
+            .demo-container {
+                height: auto;
+                min-height: 100vh;
+            }
+            
+            .demo-layout {
+                grid-template-columns: 1fr;
+                gap: 20px;
+                flex: none;
+            }
+            
+            .demo-controls {
+                height: auto;
+            }
+            
+            .demo-preview {
+                height: 60vh;
+                min-height: 400px;
+            }
+            
+            .textarea {
+                min-height: 150px;
+                max-height: 200px;
+            }
         }
         
         .demo-header {
             background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
             color: white;
-            padding: 20px;
+            padding: 15px 20px;
             border-radius: 10px;
-            margin-bottom: 30px;
+            margin-bottom: 20px;
             text-align: center;
+            flex-shrink: 0;
         }
         
         .demo-header h1 {
@@ -36,7 +87,10 @@
             padding: 20px;
             border-radius: 10px;
             box-shadow: 0 2px 10px rgba(0,0,0,0.1);
-            margin-bottom: 30px;
+            display: flex;
+            flex-direction: column;
+            height: 100%;
+            overflow-y: auto;
         }
         
         .control-group {
@@ -112,12 +166,14 @@
         .textarea {
             width: 100%;
             min-height: 200px;
+            max-height: 250px;
             padding: 15px;
             border: 2px solid #e1e4e8;
             border-radius: 6px;
             font-family: 'Monaco', 'Menlo', 'Ubuntu Mono', monospace;
             font-size: 14px;
             resize: vertical;
+            box-sizing: border-box;
         }
         
         .textarea:focus {
@@ -130,6 +186,9 @@
             border-radius: 10px;
             box-shadow: 0 2px 10px rgba(0,0,0,0.1);
             overflow: hidden;
+            display: flex;
+            flex-direction: column;
+            height: 100%;
         }
         
         .preview-header {
@@ -142,9 +201,69 @@
         
         .preview-content {
             padding: 20px;
-            min-height: 300px;
-            max-height: 60vh;
-            overflow: auto;
+            flex: 1;
+            overflow-y: auto;
+            overflow-x: hidden;
+        }
+        
+        /* Принудительно расширяем markdown контент на всю ширину */
+        .preview-content .markdown-content {
+            max-width: none !important;
+            width: 100% !important;
+            margin: 0 !important;
+            padding: 0 !important;
+            box-sizing: border-box !important;
+        }
+        
+        .preview-content .markdown-content * {
+            max-width: none !important;
+            width: auto !important;
+            box-sizing: border-box !important;
+        }
+        
+        .preview-content .markdown-content h1,
+        .preview-content .markdown-content h2,
+        .preview-content .markdown-content h3,
+        .preview-content .markdown-content h4,
+        .preview-content .markdown-content h5,
+        .preview-content .markdown-content h6 {
+            width: 100% !important;
+            max-width: none !important;
+        }
+        
+        .preview-content .markdown-content p,
+        .preview-content .markdown-content ul,
+        .preview-content .markdown-content ol,
+        .preview-content .markdown-content blockquote,
+        .preview-content .markdown-content div {
+            width: 100% !important;
+            max-width: none !important;
+        }
+        
+        .preview-content .markdown-content pre {
+            width: 100% !important;
+            max-width: none !important;
+        }
+        
+        .preview-content .markdown-content table {
+            width: 100% !important;
+            max-width: none !important;
+        }
+        
+        /* Дополнительные переопределения для полной ширины */
+        #previewContent {
+            width: 100% !important;
+            max-width: none !important;
+        }
+        
+        #previewContent * {
+            max-width: none !important;
+        }
+        
+        #previewContent .markdown-content {
+            display: block !important;
+            width: 100% !important;
+            max-width: none !important;
         }
         
         .example-buttons {
@@ -203,6 +322,7 @@
             border: 1px solid #bee5eb;
         }
     </style>
+    <link rel="stylesheet" href="styles.css">
 </head>
 <body>
     <div class="demo-container">
@@ -211,45 +331,47 @@
             <p>Демонстрация возможностей глобального модуля для отображения markdown</p>
         </div>
         
-        <div class="demo-controls">
-            <div class="control-group">
-                <button class="btn" onclick="renderMarkdownFromInput()">🔄 Отобразить Markdown</button>
-                <button class="btn btn-secondary" onclick="clearPreview()">🗑️ Очистить</button>
-                <button class="btn btn-success" onclick="loadFromFile()">📁 Загрузить из файла</button>
+        <div class="demo-layout">
+            <div class="demo-controls">
+                <div class="control-group">
+                    <button class="btn" onclick="renderMarkdownFromInput()">🔄 Отобразить Markdown</button>
+                    <button class="btn btn-secondary" onclick="clearPreview()">🗑️ Очистить</button>
+                    <button class="btn btn-success" onclick="loadFromFile()">📁 Загрузить из файла</button>
+                    
+                    <div class="file-input-wrapper">
+                        <input type="file" id="fileInput" class="file-input" accept=".md,.markdown,.txt" onchange="handleFileLoad(event)">
+                        <label for="fileInput" class="file-input-label">📂 Выбрать файл</label>
+                    </div>
+                </div>
+                <div class="control-group">
+                    <label for="markdownInput">Введите markdown контент:</label>
+                    <textarea id="markdownInput" class="textarea" placeholder="Введите ваш markdown контент здесь..."></textarea>
+                </div>
                 
-                <div class="file-input-wrapper">
-                    <input type="file" id="fileInput" class="file-input" accept=".md,.markdown,.txt" onchange="handleFileLoad(event)">
-                    <label for="fileInput" class="file-input-label">📂 Выбрать файл</label>
+                <div class="control-group">
+                    <label>Быстрые примеры:</label>
+                    <div class="example-buttons">
+                        <button class="example-btn" onclick="loadExample('basic')">Базовый пример</button>
+                        <button class="example-btn" onclick="loadExample('code')">Код (BSL/1C)</button>
+                        <button class="example-btn" onclick="loadExample('table')">Таблица</button>
+                        <button class="example-btn" onclick="loadExample('gherkin')">Gherkin</button>
+                        <button class="example-btn" onclick="loadExample('json')">JSON</button>
+                        <button class="example-btn" onclick="loadExample('complex')">Сложный пример</button>
+                    </div>
                 </div>
-            </div>
-            <div class="control-group">
-                <label for="markdownInput">Введите markdown контент:</label>
-                <textarea id="markdownInput" class="textarea" placeholder="Введите ваш markdown контент здесь..."></textarea>
+                
+                <div id="status" class="status hidden" style="display: none;"></div>
             </div>
             
-            <div class="control-group">
-                <label>Быстрые примеры:</label>
-                <div class="example-buttons">
-                    <button class="example-btn" onclick="loadExample('basic')">Базовый пример</button>
-                    <button class="example-btn" onclick="loadExample('code')">Код (BSL/1C)</button>
-                    <button class="example-btn" onclick="loadExample('table')">Таблица</button>
-                    <button class="example-btn" onclick="loadExample('gherkin')">Gherkin</button>
-                    <button class="example-btn" onclick="loadExample('json')">JSON</button>
-                    <button class="example-btn" onclick="loadExample('complex')">Сложный пример</button>
+            <div class="demo-preview">
+                <div class="preview-header">
+                    📄 Предварительный просмотр
                 </div>
-            </div>
-            
-            <div id="status" class="status hidden" style="display: none;"></div>
-        </div>
-        
-        <div class="demo-preview">
-            <div class="preview-header">
-                📄 Предварительный просмотр
-            </div>
-            <div id="previewContent" class="preview-content markdown-content">
-                <div class="empty-state">
-                    <h3>Готов к работе!</h3>
-                    <p>Введите markdown контент выше или выберите пример для просмотра</p>
+                <div id="previewContent" class="preview-content markdown-content">
+                    <div class="empty-state">
+                        <h3>Готов к работе!</h3>
+                        <p>Введите markdown контент выше или выберите пример для просмотра</p>
+                    </div>
                 </div>
             </div>
         </div>
