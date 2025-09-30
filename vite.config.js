@@ -6,6 +6,7 @@ export default defineConfig(({ mode }) => {
   const isSingleFile = mode === 'single-file'
   
   return {
+    base: './',
     build: {
       rollupOptions: {
         input: {
