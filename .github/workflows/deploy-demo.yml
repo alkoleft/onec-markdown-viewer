@@ -32,7 +32,7 @@ jobs:
       run: npm ci
       
     - name: Build project
-      run: npm run build
+      run: npm run build:demo
       
     - name: Prepare demo files
       run: |
@@ -41,10 +41,6 @@ jobs:
         cp dist/demo.html dist-demo/index.html
         # Копируем собранные ресурсы
         cp -r dist/assets dist-demo/
-        # Копируем standalone версию если нужна
-        if [ -f dist/index-standalone.html ]; then
-          cp dist/index-standalone.html dist-demo/
-        fi
         
     - name: Setup Pages
       uses: actions/configure-pages@v4

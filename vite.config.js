@@ -11,7 +11,6 @@ export default defineConfig(({ mode }) => {
       rollupOptions: {
         input: {
           main: resolve(__dirname, 'index.html'),
-          demo: resolve(__dirname, 'demo.html')
         },
         output: {
           entryFileNames: isSingleFile ? 'assets/[name].js' : 'assets/[name]-[hash].js',
